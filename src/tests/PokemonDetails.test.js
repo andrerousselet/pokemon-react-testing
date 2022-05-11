@@ -40,6 +40,12 @@ describe('Requisito 7: componente <PokemonDetails.js />', () => {
         const imgLocations = screen.getAllByRole('img',
           { name: `${pokemon.name} location` });
         expect(imgLocations.length).toEqual(pokemon.foundAt.length);
+        imgLocations.forEach((img, index) => {
+          expect(img.src).toBe(pokemon.foundAt[index].map);
+          const locationName = screen.getByText(pokemon.foundAt[index].location);
+          console.log(pokemon.foundAt[index].location);
+          expect(locationName).toBeInTheDocument();
+        });
       });
     });
 });
