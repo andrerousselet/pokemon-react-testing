@@ -1,9 +1,9 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
 import pokemons from '../data';
-import userEvent from '@testing-library/user-event';
 
 describe('Requisito 7: componente <PokemonDetails.js />', () => {
   test('se as informações detalhadas do pokémon selecionado são mostradas na tela',
