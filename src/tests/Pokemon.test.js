@@ -1,14 +1,16 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
 import Pokemon from '../components/Pokemon';
 import pokemons from '../data';
 
 describe('Requisito 6: componente <Pokemon.js />', () => {
-  test('Teste se é renderizado um card com as informações de determinado pokémon.',
+  test('Deve renderizar um card com as informações de determinado pokémon.',
     () => {
       pokemons.forEach((pokemon, index) => {
         renderWithRouter(<Pokemon pokemon={ pokemon } isFavorite={ false } />);
+
         const names = screen.getAllByTestId('pokemon-name');
         expect(names[index]).toBeInTheDocument();
         expect(names[index]).toHaveTextContent(pokemon.name);
@@ -28,6 +30,22 @@ describe('Requisito 6: componente <Pokemon.js />', () => {
         expect(images[index]).toBeInTheDocument();
         expect(images[index]).toHaveAttribute('src', pokemon.image);
         expect(images[index]).toHaveAttribute('alt', `${pokemon.name} sprite`);
+      });
+    });
+
+  test('Deve conter um link que redireciona para a página de detalhes deste pokémon.',
+    () => {
+      pokemons.forEach((pokemon, index) => {
+        const { history } = renderWithRouter(
+          <Pokemon pokemon={ pokemon } isFavorite={ false } />,
+        );
+
+        const links = screen.getAllByRole('link', { name: /more details/i });
+        expect(links[index]).toBeInTheDocument();
+        expect(links[index]).toHaveAttribute('href', `/pokemons/${pokemon.id}`);
+
+        userEvent.click(links[index]);
+        expect(history.location.pathname).toBe(`/pokemons/${pokemon.id}`);
       });
     });
 });
